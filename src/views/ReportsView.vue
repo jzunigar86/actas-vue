@@ -81,6 +81,7 @@ const downloadPDF = (row) => {
 
   console.log("Generando PDF con datos:", row);
 
+  // Tabla de asistencia con 5 participantes fijos
   const asistencia = [
     [
       { text: "NOMBRE", style: "header" },
@@ -88,66 +89,131 @@ const downloadPDF = (row) => {
       { text: "ASISTIÓ", style: "header" },
       { text: "FIRMA", style: "header" }
     ],
-    [row.nombre || "-", row.cargo || "-", row.asistio || "-", row.firmaBase64 ? { image: row.firmaBase64, width: 40 } : "-"]
+    // Participante 1 (siempre visible)
+    [
+      row.nombre || "Nombre no especificado",
+      row.cargo || "Cargo no especificado",
+      row.asistio || "No registrado",
+      row.firmaBase641 ? { image: row.firmaBase641, width: 50 } : "Sin firma"
+    ],
+    // Participante 2
+    [
+      row.nombre1 || "-",
+      row.cargo1 || "-",
+      row.asistio1 || "-",
+      row.firmaBase642 ? { image: row.firmaBase642, width: 50 } : "-"
+    ],
+    // Participante 3
+    [
+      row.nombre2 || "-",
+      row.cargo2 || "-",
+      row.asistio2 || "-",
+      row.firmaBase643 ? { image: row.firmaBase643, width: 50 } : "-"
+    ],
+    // Participante 4
+    [
+      row.nombre3 || "-",
+      row.cargo3 || "-",
+      row.asistio3 || "-",
+      row.firmaBase644 ? { image: row.firmaBase644, width: 50 } : "-"
+    ],
+    // Participante 5
+    [
+      row.nombre4 || "-",
+      row.cargo4 || "-",
+      row.asistio4 || "-",
+      row.firmaBase645 ? { image: row.firmaBase645, width: 50 } : "-"
+    ]
   ];
 
-  for (let i = 1; i <= 5; i++) {
-    asistencia.push([
-      row[`nombre${i}`] || "-",
-      row[`cargo${i}`] || "-",
-      row[`asistio${i}`] || "-",
-      row[`firmaBase64${i}`] ? { image: row[`firmaBase64${i}`], width: 50 } : "-"
-    ]);
-  }
-
+  // Tabla de agenda (3 temas fijos)
   const agenda = [
     [
       { text: "N°", style: "header" },
       { text: "TEMAS", style: "header" },
       { text: "ABORDADO", style: "header" },
       { text: "COMPLETO", style: "header" }
+    ],
+    // Tema 1
+    [
+      "1",
+      { text: row.tema1 || "-", alignment: 'justify' },
+      row.abordado1 || "-",
+      row.completo1 || "-"
+    ],
+    // Tema 2
+    [
+      "2",
+      { text: row.tema2 || "-", alignment: 'justify' },
+      row.abordado2 || "-",
+      row.completo2 || "-"
+    ],
+    // Tema 3
+    [
+      "3",
+      { text: row.tema3 || "-", alignment: 'justify' },
+      row.abordado3 || "-",
+      row.completo3 || "-"
     ]
   ];
 
-  for (let i = 1; i <= 3; i++) {
-    agenda.push([
-      i.toString(),
-      { text: row[`tema${i}`] || "-", alignment: 'justify' },
-      row[`abordado${i}`] || "-",
-      row[`completo${i}`] || "-"
-    ]);
-  }
-
+  // Tabla de desarrollo (3 temas fijos)
   const desarrollo = [
     [
       { text: "N°", style: "header" },
       { text: "TEMA TRATADO", style: "header" }
+    ],
+    // Tema 1
+    [
+      "1",
+      { text: row.temaTratado1 || "-", alignment: 'justify' }
+    ],
+    // Tema 2
+    [
+      "2",
+      { text: row.temaTratado2 || "-", alignment: 'justify' }
+    ],
+    // Tema 3
+    [
+      "3",
+      { text: row.temaTratado3 || "-", alignment: 'justify' }
     ]
   ];
 
-  for (let i = 1; i <= 3; i++) {
-    desarrollo.push([
-      i.toString(),
-      { text: row[`temaTratado${i}`] || "-", alignment: 'justify' }
-    ]);
-  }
-
+  // Tabla de compromisos (4 compromisos fijos)
   const compromisos = [
     [
       { text: "DESCRIPCIÓN", style: "header" },
       { text: "RESPONSABLE", style: "header" },
       { text: "FECHA PREVISTA", style: "header" }
+    ],
+    // Compromiso 1
+    [
+      { text: row.descripcion1 || "-", alignment: 'justify' },
+      row.responsable1 || "-",
+      row.fechaPrevista1 || "-"
+    ],
+    // Compromiso 2
+    [
+      { text: row.descripcion2 || "-", alignment: 'justify' },
+      row.responsable2 || "-",
+      row.fechaPrevista2 || "-"
+    ],
+    // Compromiso 3
+    [
+      { text: row.descripcion3 || "-", alignment: 'justify' },
+      row.responsable3 || "-",
+      row.fechaPrevista3 || "-"
+    ],
+    // Compromiso 4
+    [
+      { text: row.descripcion4 || "-", alignment: 'justify' },
+      row.responsable4 || "-",
+      row.fechaPrevista4 || "-"
     ]
   ];
 
-  for (let i = 1; i <= 4; i++) {
-    compromisos.push([
-      { text: row[`descripcion${i}`] || "-", alignment: 'justify' },
-      row[`responsable${i}`] || "-",
-      row[`fechaPrevista${i}`] || "-"
-    ]);
-  }
-
+  // Definición del documento PDF (igual que antes)
   const docDefinition = {
     pageSize: "LETTER",
     pageMargins: [40, 60, 40, 60],
@@ -158,34 +224,29 @@ const downloadPDF = (row) => {
         { width: '*', text: '' }
       ]
     }),
-
     footer: (currentPage, pageCount) => ({
-  columns: [
-    { width: '*', text: '' },
-    { image: footerBase64, width: 500, alignment: 'center' },
-    { width: '*', text: '' }
-  ],
-  margin: [80, 0, 80, -100] // Ajusta el valor negativo para subirlo
-})
-,
-   
-    
+      columns: [
+        { width: '*', text: '' },
+        { image: footerBase64, width: 500, alignment: 'center' },
+        { width: '*', text: '' }
+      ],
+      margin: [80, 0, 80, -100]
+    }),
     content: [
-    { text: '', margin: [0, 20, 0, 10] },
+      { text: '', margin: [0, 20, 0, 10] },
       { text: `ACTA # ${row.codigoUnico || "N/A"}`, style: "title", alignment: "center" },
       { text: "Información Básica", style: "section" },
       {
         table: {
           widths: ['100%'],
           body: [
-            [{ text: "OBJETIVO DE LA REUNIÓN", style: "header", fillColor: '#4CAF50', alignment: 'left', margin: [5, 5, 5, 5] }],
-            [{ text: row.objetivo || "N/A", alignment: 'justify', margin: [5, 10, 5, 10] }],
+            [{ text: "OBJETIVO DE LA REUNIÓN", style: "header", fillColor: '#7e7e7e', alignment: 'left', margin: [5, 5, 5, 5] }],
+            [{ text: row.objetivo || "N/A", alignment: 'justify', margin: [5, 10, 5, 10] }]
           ]
         },
         layout: {
-          hLineWidth: (i) => (i === 1 ? 1 : 1)
+          hLineWidth: (i) => 1
         },
-        
       },
       {
         table: {
@@ -197,13 +258,12 @@ const downloadPDF = (row) => {
             [{ text: "Hora Fin:", bold: true }, { text: row.horaFin || "N/A" }]
           ]
         }
-      
       },
       { text: "\nAsistencia", style: "section" },
       { table: { widths: ["30%", "30%", "10%", "30%"], body: asistencia } },
       { text: "\nAgenda", style: "section" },
       { table: { widths: ["5%", "66%", "13.5%", "13.5%"], body: agenda } },
-      { text: "", margin: [0, 60, 0, 20] }, // Ajusta el margen superior
+      { text: "", margin: [0, 60, 0, 20] },
       { text: "\nDesarrollo de la Reunión", style: "section", pageBreak: 'before' },
       { table: { widths: ["10%", "90%"], body: desarrollo } },
       { text: "\nCompromisos", style: "section" },
@@ -212,14 +272,12 @@ const downloadPDF = (row) => {
     styles: {
       title: { fontSize: 16, bold: true, margin: [0, 0, 0, 10] },
       section: { fontSize: 12, bold: true, margin: [0, 10, 0, 5] },
-      header: { fontSize: 11, bold: true, alignment: 'center', fillColor: '#4CAF50' }
-      
-    },
+      header: { fontSize: 11, bold: true, alignment: 'center', fillColor: '#7e7e7e' }
+    }
   };
 
   pdfMake.createPdf(docDefinition).download(`Acta_${row.codigoUnico}.pdf`);
 };
-
 export default {
   setup() {
     const data = ref([]);
