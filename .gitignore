@@ -1,0 +1,21 @@
+# Ignorar directorios del sistema
+.DS_Store
+Thumbs.db
+*.log
+*.bak
+*.tmp
+
+# Ignorar directorios de configuración IDE
+.idea/
+.vscode/
+
+# Ignorar archivos del sistema operativo
+Desktop/
+Documents/
+Downloads/
+Favorites/
+Links/
+Music/
+OneDrive/
+Pictures/
+Videos/
